@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+/* не совмещается с тейлвиндом, позже удалю */
+/* .main-button {
+    background-color: #0055A0;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s all ease;
+}
+.secondary-button {
+    background-color: #8CC1E9;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+} */
