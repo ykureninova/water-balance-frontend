@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { setUser } from '../utils/storage.js';
 
 export default function Register() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -10,11 +11,14 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login data:", form);
+    const user = { username: form.email.split('@')[0], email: form.email };
+    setUser(user);
+    navigate("/tracker");
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6">
+      <Navbar />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-full max-w-sm"

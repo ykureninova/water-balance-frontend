@@ -5,6 +5,16 @@
     font-family: "Montserrat", sans-serif;
 }
 
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-bounce-in {
+  animation: bounce-in 0.8s ease-out;
+}
+
 /* не совмещается с тейлвиндом, позже удалю */
 /* .main-button {
     background-color: #0055A0;

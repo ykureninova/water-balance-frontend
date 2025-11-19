@@ -1,11 +1,14 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { setUser } from '../utils/storage.js';
+import Navbar from "../components/Navbar.jsx";
 
 export default function Register() {
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
+    "confirm-password": ""   // додала, щоб не було undefined
   });
   const navigate = useNavigate();
 
@@ -14,13 +17,25 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Register data:", form);
+
+    // Перевірка паролів
+    if (form.password !== form["confirm-password"]) {
+      alert("Passwords don't match!");
+      return;
+    }
+
+    // Зберігаємо юзера в localStorage
+    const user = {
+      username: form.username,
+      email: form.email,
+    };
+    setUser(user); // тепер працює!
     navigate("/goalcalc");
-    // тут буде запит до бекенду
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6">
+      <Navbar />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-full max-w-sm"

@@ -9,6 +9,7 @@ import Stats from "./pages/Statistics"
 import Profile from "./pages/Profile"
 import Achievements from "./pages/Achievements";
 import Settings from "./pages/Settings"
+import AccountSettings from "./pages/AccountSettings"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/achievements" element={<Achievements/>}/>
         <Route path="/settings" element={<Settings/>}/>
+        <Route path="/account-settings" element={<AccountSettings/>}/>
       </Routes>
     </Router>
   )
