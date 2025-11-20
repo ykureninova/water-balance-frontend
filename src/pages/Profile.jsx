@@ -22,20 +22,19 @@ export default function Profile() {
     }
   };
 
-  if (!user) return <div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>;
+  if (!user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col items-center px-6 pt-10">
-      <Navbar />
+    <div className="w-full max-w-md mx-auto">
       <div className="w-full max-w-md">
         {/* Аватар */}
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-10">
           <div className="w-32 h-32 bg-gray-300 rounded-full border-4 border-white shadow-lg"></div>
           <h2 className="text-2xl font-bold mt-4">Hi, {user.username || user.email.split("@")[0]}!</h2>
         </div>
 
         {/* Меню */}
-        <div className="bg-white rounded-3xl shadow-lg p-6 space-y-4">
+        <div className="bg-[#BDDBF7] rounded-3xl shadow-lg p-6 space-y-4">
           <button onClick={() => navigate("/account-settings")} className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition">
             Account
           </button>

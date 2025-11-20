@@ -18,7 +18,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6">
-      <Navbar />
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-full max-w-sm"

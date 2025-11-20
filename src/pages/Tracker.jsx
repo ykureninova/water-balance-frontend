@@ -66,8 +66,7 @@ export default function Tracker() {
 
   return (
     <div>
-      <Navbar />
-      <div className="min-h-screen bg-white flex flex-col items-center px-6 mt-5">
+      <div className="w-full max-w-md mx-auto">
         <main className="flex flex-col items-center mt-10 w-full max-w-md">
           <h1 className="text-2xl font-bold mb-8">
             Welcome, {user?.username || "friend"}!
@@ -134,6 +133,12 @@ export default function Tracker() {
                 {showAll ? "Hide" : "Show all"}
               </button>
             )}
+
+            <div className="test temp">
+              <button onClick={() => navigate("/info")} className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition">
+                INFO PAGE (WILL MIGRATE LATER)
+              </button>
+            </div>
           </div>
         </main>
       </div>

@@ -42,32 +42,31 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col items-center px-6 pt-10">
-      <Navbar />
+    <div className="w-full max-w-md mx-auto">
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-8">Personal settings</h1>
 
-        <div className="bg-white rounded-3xl shadow-xl p-8">
+        <div className="bg-[#BDDBF7] rounded-3xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <select name="gender" value={data.gender} onChange={e => setData({...data, gender: e.target.value})}
-              className="w-full px-4 py-4 border border-gray-300 rounded-xl text-lg" required>
+              className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition" required>
               <option value="">Select gender</option>
               <option value="female">Female</option>
               <option value="male">Male</option>
             </select>
 
             <input type="number" placeholder="Weight (kg)" value={data.weight} onChange={e => setData({...data, weight: e.target.value})}
-              className="w-full px-4 py-4 border border-gray-300 rounded-xl text-lg" required />
+              className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition" required />
 
             <input type="number" placeholder="Height (cm)" value={data.height} onChange={e => setData({...data, height: e.target.value})}
-              className="w-full px-4 py-4 border border-gray-300 rounded-xl text-lg" />
+              className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition" />
 
             <input type="number" min="1" max="5" placeholder="Activity level (1–5)" value={data.activity}
               onChange={e => setData({...data, activity: e.target.value})}
-              className="w-full px-4 py-4 border border-gray-300 rounded-xl text-lg" />
+              className="w-full text-left py-4 px-6 bg-blue-50 rounded-2xl flex items-center gap-4 hover:bg-blue-100 transition" />
 
             <button type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 rounded-full transition text-lg">
+              className="w-full bg-[#0055A0] hover:bg-[#004480] text-white font-bold py-5 rounded-full transition text-lg">
               Save & Update Goal
             </button>
           </form>

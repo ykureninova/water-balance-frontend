@@ -7,6 +7,9 @@ import statsIcon from '../assets/stats.png';
 import homeIcon from '../assets/home.png';
 import trophyIcon from '../assets/trophy.png';
 import profileIcon from '../assets/pfp.png';
+import infoIcon from '../assets/information.png'
+import bookIcon from '../assets/book.png'
+import addIcon from '../assets/add.png'
 
 export default function Navbar() {
   const location = useLocation();
@@ -17,11 +20,14 @@ export default function Navbar() {
   );
 
   const items = [
-    { to: "/tracker", label: "Tracker", icon: trackerIcon },
+    { to: "/", label: "About", icon: bookIcon },
     { to: "/stats", label: "Stats", icon: statsIcon },
-    { to: "/", label: "Home", icon: homeIcon },
+    { to: "/tracker", label: "Tracker", icon: addIcon },
     { to: "/achievements", label: "Awards", icon: trophyIcon },
     { to: "/profile", label: "Profile", icon: profileIcon },
+    
+    // посил. на інфу десь на гол. сторінцці
+    // { to: "/info", label: "Info", icon: infoIcon } 
   ];
 
   return (
