@@ -31,6 +31,23 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+.custom-scrollbar-vertical {
+  scrollbar-width: thin;
+  scrollbar-color: #8CC1E9 #BDDBF7;
+}
+.custom-scrollbar-vertical::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar-vertical::-webkit-scrollbar-track {
+  background: #BDDBF7;
+  border-radius: 999px;
+}
+.custom-scrollbar-vertical::-webkit-scrollbar-thumb {
+  background: #8CC1E9;
+  border-radius: 999px;
+}
+
+
 /* не совмещается с тейлвиндом, позже удалю */
 /* .main-button {
     background-color: #0055A0;

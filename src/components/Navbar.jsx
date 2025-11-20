@@ -10,6 +10,7 @@ import profileIcon from '../assets/pfp.png';
 import infoIcon from '../assets/information.png'
 import bookIcon from '../assets/book.png'
 import addIcon from '../assets/add.png'
+import logo from '../assets/logo.svg'
 
 export default function Navbar() {
   const location = useLocation();
@@ -30,24 +31,38 @@ export default function Navbar() {
     // { to: "/info", label: "Info", icon: infoIcon } 
   ];
 
+  const hideBottomPadding = ["/login", "/register", "/onboarding"].includes(location.pathname);
+
   return (
     <>
-      {/* Десктоп - верхній */}
-      <nav className="hidden md:block w-full border-b border-gray-200 bg-white">
-        <div className="flex justify-center gap-12 py-5 text-gray-700 font-medium">
-          {items.map(item => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`hover:text-blue-600 transition ${
-                (item.to === "/profile" ? isProfileActive : isActive(item.to))
-                  ? "text-blue-600 font-bold"
-                  : ""
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+      {/* ДЕСКТОП верхній навбар з лого */}
+      <nav className="hidden fixed md:block w-full border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* ЛОГО зліва */}
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition">
+            <img src={logo} alt="Hydra" className="h-5 object-contain" />
+          </Link>
+
+          {/* Меню справа */}
+          <div className="flex items-center gap-10 text-gray-700 font-medium">
+            {items.map(item => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`relative pb-1 transition hover:text-[#0055A0] ${
+                  (item.to === "/profile" ? isProfileActive : isActive(item.to))
+                    ? "text-[#0055A0] font-bold"
+                    : ""
+                }`}
+              >
+                {item.label}
+                {/* Підкреслення для активного пункту */}
+                {(item.to === "/profile" ? isProfileActive : isActive(item.to)) && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#0055A0] rounded-full" />
+                )}
+              </Link>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -76,7 +91,8 @@ export default function Navbar() {
       </nav>
 
       {/* Відступ знизу на мобілці */}
-      <div className="pb-20 md:pb-0" />
+      
+      {!hideBottomPadding && <div className="pb-20 md:pb-0" />}
     </>
   );
 }

@@ -25,10 +25,10 @@ export default function Account() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto ">
       <div className="w-full max-w-md">
 
-        <div className="bg-[#BDDBF7] rounded-3xl shadow-xl p-8 mt-15">
+        <div className="bg-[#BDDBF7] rounded-3xl shadow-xl p-8 md:mt-30">
           {/* Аватар */}
           <div className="flex justify-center -mt-20 md:-mt-24">
             <div className="relative">

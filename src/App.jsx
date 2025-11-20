@@ -19,8 +19,6 @@ function App() {
       <div className="min-h-screen flex flex-col">
         {/* Навбар зверху (десктоп) + нижній таббар (мобілка) вже в Navbar */}
         <Navbar />
-
-        {/* Основний контент з правильними відступами */}
         <main className="flex-1 pb-24 md:pb-8 pt-4 md:pt-8 px-6">
           <Routes>
             <Route path="/" element={<Home />} />

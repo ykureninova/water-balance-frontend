@@ -25,7 +25,7 @@ export default function Profile() {
   if (!user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto mt-15">
       <div className="w-full max-w-md">
         {/* Аватар */}
         <div className="flex flex-col items-center mb-10">

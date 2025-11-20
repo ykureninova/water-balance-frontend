@@ -1,8 +1,8 @@
 // src/utils/storage.js
-export const STORAGE_KEYS = {
-  USER: "water_user",
-  DRINKS: "water_drinks", // масив всіх порцій
-  NORM: "water_norm",
+const STORAGE_KEYS = {
+  USERS: "hydra_users",
+  CURRENT_USER: "hydra_current_user",
+  DRINKS: "hydra_drinks_v2", // нова версія ключа, щоб не ламати старі дані
 };
 
 export const getUser = () => {
@@ -26,33 +26,38 @@ export const clearUser = () => {
 
 export const getDrinks = () => {
   const user = getUser();
-  if (!user) return [];
-  const key = `drinks_${user.username || user.email}`;
-  const drinks = localStorage.getItem(key);
-  return drinks ? JSON.parse(drinks) : [];
+  const allDrinks = JSON.parse(localStorage.getItem(STORAGE_KEYS.DRINKS) || "[]");
+  
+  // Повертаємо ТІЛЬКИ напої поточного користувача
+  return user ? allDrinks.filter(d => d.userId === user.id) : [];
 };
 
+// === НАПОЇ === тепер з userId!
 export const addDrink = (drink) => {
   const user = getUser();
   if (!user) return;
 
-  const key = `drinks_${user.username || user.email}`;
   const drinks = getDrinks();
-  drinks.push({ ...drink, date: new Date().toISOString() });
-  localStorage.setItem(key, JSON.stringify(drinks));
+  drinks.push({
+    ...drink,
+    userId: user.id, // головне!
+  });
+  localStorage.setItem(STORAGE_KEYS.DRINKS, JSON.stringify(drinks));
 };
 
+// Прогрес за сьогодні тільки для поточного користувача
 export const getTodayProgress = () => {
   const drinks = getDrinks();
   const today = new Date().toISOString().slice(0, 10);
+
   return drinks
-    .filter(d => d.date.startsWith(today))
+    .filter(d => d.date && d.date.startsWith(today))
     .reduce((sum, d) => sum + d.amount, 0);
 };
 
 export const getNorm = () => {
-  const norm = localStorage.getItem(STORAGE_KEYS.NORM);
-  return norm ? parseInt(norm) : 2000; // дефолт 2000 мл
+  const user = getUser();
+  return user?.dailyGoal || 2000;
 };
 
 export const setNorm = (norm) => {
