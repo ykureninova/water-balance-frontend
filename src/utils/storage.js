@@ -1,84 +1,104 @@
 // src/utils/storage.js
+
 const STORAGE_KEYS = {
-  USERS: "hydra_users",
-  CURRENT_USER: "hydra_current_user",
-  DRINKS: "hydra_drinks_v2", // нова версія ключа, щоб не ламати старі дані
+  USER: "hydra_user",
+  TOKEN: "hydra_token",
+  NORM: "hydra_norm",
 };
 
+// ===== AUTH TOKEN =====
+
+export const getToken = () => {
+  return localStorage.getItem(STORAGE_KEYS.TOKEN) || null;
+};
+
+export const setToken = (token) => {
+  if (token) {
+    localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+  } else {
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
+  }
+};
+
+export const clearToken = () => {
+  localStorage.removeItem(STORAGE_KEYS.TOKEN);
+};
+
+// ===== USER =====
+
 export const getUser = () => {
-  const user = localStorage.getItem(STORAGE_KEYS.USER);
-  return user ? JSON.parse(user) : null;
+  const raw = localStorage.getItem(STORAGE_KEYS.USER);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 };
 
 export const setUser = (user) => {
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
-};
-
-export const clearUser = () => {
-  const user = getUser();
-  if (user) {
-    const key = `drinks_${user.username || user.email}`;
-    localStorage.removeItem(key);
+  if (!user) {
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    return;
   }
-  localStorage.removeItem(STORAGE_KEYS.USER);
-  localStorage.removeItem(STORAGE_KEYS.NORM);
-};
-
-export const getDrinks = () => {
-  const user = getUser();
-  const allDrinks = JSON.parse(localStorage.getItem(STORAGE_KEYS.DRINKS) || "[]");
-  
-  // Повертаємо ТІЛЬКИ напої поточного користувача
-  return user ? allDrinks.filter(d => d.userId === user.id) : [];
-};
-
-// === НАПОЇ === тепер з userId!
-export const addDrink = (drink) => {
-  const user = getUser();
-  if (!user) return;
-
-  const drinks = getDrinks();
-  drinks.push({
-    ...drink,
-    userId: user.id, // головне!
-  });
-  localStorage.setItem(STORAGE_KEYS.DRINKS, JSON.stringify(drinks));
-};
-
-// Прогрес за сьогодні тільки для поточного користувача
-export const getTodayProgress = () => {
-  const drinks = getDrinks();
-  const today = new Date().toISOString().slice(0, 10);
-
-  return drinks
-    .filter(d => d.date && d.date.startsWith(today))
-    .reduce((sum, d) => sum + d.amount, 0);
-};
-
-export const getNorm = () => {
-  const user = getUser();
-  return user?.dailyGoal || 2000;
-};
-
-export const setNorm = (norm) => {
-  localStorage.setItem(STORAGE_KEYS.NORM, norm);
+  const normalized =
+    user && user._id && !user.id ? { ...user, id: user._id } : user;
+  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(normalized));
 };
 
 export const updateUser = (updatedData) => {
   const user = getUser();
-  if (!user) return;
+  if (!user) return null;
   const newUser = { ...user, ...updatedData };
-  localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
+  setUser(newUser);
   return newUser;
 };
 
-export const logout = () => {
+export const clearUser = () => {
+  localStorage.removeItem(STORAGE_KEYS.USER);
+};
+
+// ===== NORM (daily goal) =====
+
+export const getNorm = () => {
+  const user = getUser();
+  if (user && typeof user.waterNorm === "number") {
+    return user.waterNorm;
+  }
+  const stored = localStorage.getItem(STORAGE_KEYS.NORM);
+  return stored ? Number(stored) : 2000;
+};
+
+export const setNorm = (norm) => {
+  const value = Number(norm);
+  if (!Number.isFinite(value)) return;
+
+  localStorage.setItem(STORAGE_KEYS.NORM, String(value));
+
   const user = getUser();
   if (user) {
-    const drinksKey = `drinks_${user.username || user.email}`;
-    // Опціонально: можна видаляти напої при логауті, або залишати 
-    // localStorage.removeItem(drinksKey);
+    setUser({ ...user, waterNorm: value });
   }
+};
+
+// ===== DRINKS (тепер все через бек; тут заглушки, щоб не ламати імпорти) =====
+
+export const getDrinks = () => {
+  return [];
+};
+
+export const addDrink = () => {
+  // no-op, напої зберігаються в бекенді
+};
+
+export const getTodayProgress = () => {
+  return 0;
+};
+
+// ===== LOGOUT =====
+
+export const logout = () => {
   localStorage.removeItem(STORAGE_KEYS.USER);
   localStorage.removeItem(STORAGE_KEYS.NORM);
+  localStorage.removeItem(STORAGE_KEYS.TOKEN);
 };

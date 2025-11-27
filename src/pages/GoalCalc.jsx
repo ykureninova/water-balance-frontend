@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { setUser, setNorm, getUser} from '../utils/storage.js';
-import Navbar from "../components/Navbar.jsx";
+import { useNavigate } from "react-router-dom";
+import { setUser, setNorm, getUser } from "../utils/storage.js";
+import { api } from "../api/client.js";
 
 export default function GoalCalculator() {
   const [data, setData] = useState({
@@ -21,20 +21,18 @@ export default function GoalCalculator() {
   const calculateNorm = () => {
     if (!data.weight) return 2000;
 
-    let base = Number(data.weight) * 35;   // середнє: 35 мл на 1 кг ваги
+    let base = Number(data.weight) * 35; // середнє: 35 мл на 1 кг ваги
 
-    // Додаємо бонус за активність
     const activityBonus = data.activity
-      ? (Number(data.activity) - 1) * 300   // від 0 до +1200 мл
+      ? (Number(data.activity) - 1) * 300 // від 0 до +1200 мл
       : 0;
 
-    // Якщо чоловік — трохи більше
     if (data.gender === "male") base += 300;
 
     return Math.round(base + activityBonus);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!data.gender || !data.weight) {
@@ -46,39 +44,50 @@ export default function GoalCalculator() {
     setNorm(norm);
     setCalculatedGoal(norm);
 
-    const user = getUser();
-    if (user) {
-      setUser({ ...user, waterNorm: norm });
+    try {
+      await api("/user/me/settings", {
+        method: "post",
+        data: {
+          gender: data.gender,
+          height: data.height ? Number(data.height) : undefined,
+          weight: data.weight ? Number(data.weight) : undefined,
+          activity: data.activity ? Number(data.activity) : undefined,
+          waterNorm: norm,
+        },
+      });
+
+      const updatedUser = await api("/user/me");
+      const localUser = getUser();
+      setUser({ ...(localUser || {}), ...updatedUser, waterNorm: norm });
+    } catch (err) {
+      console.error(err);
     }
 
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
       navigate("/tracker");
-    }, 2500); // 2.5 секунди — і переходимо
+    }, 2500);
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6">
-      
-      {/* Красивий тост */}
       {showSuccess && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
           <div className="animate-bounce-in bg-gradient-to-r from-blue-500 to-[#0055A0] text-white px-8 py-6 rounded-2xl shadow-2xl text-center">
-            <p className="text-3xl font-bold mb-2">Your Goal — {calculatedGoal} ml!</p>
+            <p className="text-3xl font-bold mb-2">
+              Your Goal — {calculatedGoal} ml!
+            </p>
             <p className="text-lg opacity-90">Keep it up!</p>
           </div>
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col w-full max-w-sm"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm">
         <h1 className="text-4xl font-bold mb-20">
           Let’s calculate your goal
         </h1>
-        
+
         <div>
           <select
             name="gender"
@@ -119,7 +128,6 @@ export default function GoalCalculator() {
             Calculate
           </button>
         </div>
-        
       </form>
     </div>
   );
