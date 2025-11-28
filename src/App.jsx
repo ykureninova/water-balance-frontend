@@ -23,7 +23,7 @@ function App() {
         <div className="min-h-screen flex flex-col">
           <Navbar />
 
-          <main className="flex-1 ">
+          <main className="flex-1 pb-24 md:pb-8 pt-4 md:pt-8 px-6">
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/register" element={<Register />} />
