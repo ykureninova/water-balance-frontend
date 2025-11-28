@@ -30,7 +30,7 @@ export default function SupportModal({ onClose }) {
             </div>
             <button
               onClick={() => copyToClipboard("support@waterdrops.com")}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition whitespace-nowrap min-w-20"
+              className="bg-[#8CC1E9] hover:bg-[#74abd8] text-white px-5 py-2.5 rounded-full text-sm font-medium transition whitespace-nowrap min-w-20"
             >
               {copied === "support@waterdrops.com" ? "Copied!" : "Copy"}
             </button>
@@ -44,7 +44,7 @@ export default function SupportModal({ onClose }) {
             </div>
             <button
               onClick={() => copyToClipboard("+380991234567")}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition whitespace-nowrap min-w-20"
+              className="bg-[#8CC1E9] hover:bg-[#74abd8] text-white px-5 py-2.5 rounded-full text-sm font-medium transition whitespace-nowrap min-w-20"
             >
               {copied === "+380991234567" ? "Copied!" : "Copy"}
             </button>
