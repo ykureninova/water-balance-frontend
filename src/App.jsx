@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import GoalCalc from "./pages/GoalCalc";
-import Home from "./pages/Home";
 import Tracker from "./pages/Tracker";
 import Info from "./pages/Info";
 import Stats from "./pages/Statistics";
@@ -15,6 +14,7 @@ import FactDetail from "./pages/FactDetail";
 
 import Navbar from "./components/Navbar";
 import { ToastProvider } from "./components/ToastContext.jsx";
+import Landing from "./pages/Landing.jsx";
 
 function App() {
   return (
@@ -23,9 +23,9 @@ function App() {
         <div className="min-h-screen flex flex-col">
           <Navbar />
 
-          <main className="flex-1 pb-24 md:pb-8 pt-4 md:pt-8 px-6">
+          <main className="flex-1 ">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/goalcalc" element={<GoalCalc />} />
@@ -42,7 +42,7 @@ function App() {
         </div>
       </Router>
     </ToastProvider>
-  );
+);
 }
 
 export default App;
