@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import StatsChart from "../components/StatsChart";
 import { api } from "../api/client.js";
 
@@ -14,9 +13,7 @@ export default function Statistics() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const check = () => {
-      setIsMobile(window.innerWidth <= 480);
-    };
+    const check = () => setIsMobile(window.innerWidth <= 480);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -39,9 +36,10 @@ export default function Statistics() {
       setChartData(data.data || []);
       setLabel(data.label || labelsMap[r]);
       setAverage(data.average || 0);
+
+      // GLOBAL daily record from backend (ALWAYS MAX OF ALL TIME)
       setRecord(data.record || 0);
-    } catch (e) {
-      console.error(e);
+    } catch {
       setChartData([]);
       setLabel(labelsMap[r]);
       setAverage(0);
@@ -56,22 +54,20 @@ export default function Statistics() {
   }, [range]);
 
   return (
-    <div className="min-h-screen bg-white font-[Montserrat]">
-      <main className="max-w-[900px] mx-auto px-6 pt-6">
-        <h1 className="text-[36px] font-bold text-black mb-6 text-center">
-          Statistic
-        </h1>
+    <div className="min-h-screen bg-white font-[Montserrat] pt-20">
 
-        {/* Toggle */}
-        <div className="flex bg-[#BDDBF7] w-[232px] h-[37px] rounded-[30px] mx-auto mb-6 px-2 items-center justify-between">
+      <main className="max-w-[900px] mx-auto px-6">
+
+        {/* TOGGLE */}
+        <div className="bg-white/80 border border-[#BDDBF7]/50 backdrop-blur-sm rounded-3xl shadow-xl w-[240px] mx-auto h-[45px] flex items-center justify-between px-3 mb-8">
           {["d", "w", "m", "y"].map((t) => (
             <button
               key={t}
               onClick={() => setRange(t)}
-              className={`w-[50px] h-[29px] rounded-[30px] text-[16px] font-semibold transition ${
+              className={`w-[50px] h-[32px] rounded-[30px] text-[15px] font-semibold transition ${
                 range === t
                   ? "bg-[#0055A0] text-white"
-                  : "bg-white text-[#0055A0] border border-[#0055A0]"
+                  : "bg-[#BDDBF7]/30 text-[#0055A0]"
               }`}
             >
               {t}
@@ -79,10 +75,12 @@ export default function Statistics() {
           ))}
         </div>
 
-        <h2 className="text-[20px] font-bold mb-3 text-center">{label}</h2>
+        <h2 className="text-[22px] font-bold text-center mb-6 text-[#0055A0]">
+          {label}
+        </h2>
 
-        {/* graph */}
-        <div className="w-full flex justify-center mb-10 mt-4">
+        {/* GRAPH */}
+        <div className="w-full flex justify-center mb-10">
           {loading ? (
             <div className="text-sm text-gray-500">Loading...</div>
           ) : chartData.length === 0 ? (
@@ -92,21 +90,25 @@ export default function Statistics() {
           )}
         </div>
 
-        {/* Summary */}
-        <div className="space-y-4 mb-10 max-w-[400px] mx-auto">
-          <div className="bg-[#BDDBF7] w-full h-[49px] rounded-[30px] flex items-center justify-between px-4">
-            <span className="font-semibold text-black">Daily average</span>
+        {/* SUMMARY */}
+        <div className="space-y-4 mb-24 max-w-[400px] mx-auto">
+
+          <div className="bg-[#BDDBF7]/30 border border-[#BDDBF7]/50 rounded-2xl flex items-center justify-between px-5 h-[52px]">
+            <span className="font-semibold text-[#0055A0]">Daily average</span>
             <span className="bg-[#438BC4] text-white px-4 py-[6px] rounded-[20px]">
               {average} ml
             </span>
           </div>
 
-          <div className="bg-[#BDDBF7] w-full h-[49px] rounded-[30px] flex items-center justify-between px-4">
-            <span className="font-semibold text-black">Daily record</span>
+          <div className="bg-[#BDDBF7]/30 border border-[#BDDBF7]/50 rounded-2xl flex items-center justify-between px-5 h-[52px]">
+            <span className="font-semibold text-[#0055A0]">Daily record</span>
+
+            {/* GLOBAL MAX FOR ALL TIME (ALWAYS SAME) */}
             <span className="bg-[#438BC4] text-white px-4 py-[6px] rounded-[20px]">
               {record} ml
             </span>
           </div>
+
         </div>
       </main>
     </div>

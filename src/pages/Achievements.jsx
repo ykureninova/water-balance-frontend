@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import WeeklyGoalGlass from "../components/WeeklyGoalGlass";
 import AchievementToast from "../components/AchievementToast";
-
 import { api } from "../api/client.js";
 
 import streakIcon from "../assets/streak.png";
@@ -39,17 +37,11 @@ const META = {
 
 export default function Achievements() {
   const [achievements, setAchievements] = useState([]);
-
-  // тиждень
-  const [weekDays, setWeekDays] = useState(
-    [false, false, false, false, false, false, false]
-  );
+  const [weekDays, setWeekDays] = useState([false, false, false, false, false, false, false]);
   const [weeklySum, setWeeklySum] = useState(0);
   const [weeklyGoal, setWeeklyGoal] = useState(0);
-  const [weeklyPercent, setWeeklyPercent] = useState(0);
-  const [weeklyStreak, setWeeklyStreak] = useState(0); // дні підряд
+  const [weeklyStreak, setWeeklyStreak] = useState(0);
 
-  // тости та модалка
   const [toastVisible, setToastVisible] = useState(false);
   const [toastData, setToastData] = useState(null);
   const [selected, setSelected] = useState(null);
@@ -59,7 +51,6 @@ export default function Achievements() {
     setToastVisible(true);
     setTimeout(() => setToastVisible(false), 3000);
   };
-
 
   useEffect(() => {
     const handler = (e) => {
@@ -83,36 +74,24 @@ export default function Achievements() {
     return () => window.removeEventListener("achievement-earned", handler);
   }, []);
 
-
-  // LOAD ACHIEVEMENTS
   const loadAchievements = async () => {
     const data = await api("/achievements/user/me");
     if (!data) return;
 
-    const mapped = data.map((d) => ({
-      ...d,
-      icon: META[d.code]?.icon,
-    }));
-
     setAchievements(
-      mapped.sort((a, b) => new Date(a.achievedAt) - new Date(b.achievedAt))
+      data
+        .map((d) => ({ ...d, icon: META[d.code]?.icon }))
+        .sort((a, b) => new Date(a.achievedAt) - new Date(b.achievedAt))
     );
   };
 
-
-  // LOAD WEEKLY CARD DATA
   const loadWeeklyInfo = async () => {
     const data = await api("/achievements/user/me/streak");
     if (!data) return;
 
-    setWeekDays(
-      Array.isArray(data.weekDays) && data.weekDays.length === 7
-        ? data.weekDays
-        : [false, false, false, false, false, false, false]
-    );
+    setWeekDays(data.weekDays || [false, false, false, false, false, false, false]);
     setWeeklySum(data.weeklySum || 0);
     setWeeklyGoal(data.weeklyGoal || 0);
-    setWeeklyPercent(data.weeklyPercent || 0);
     setWeeklyStreak(data.streak || 0);
   };
 
@@ -121,33 +100,24 @@ export default function Achievements() {
     loadWeeklyInfo();
   }, []);
 
-  const formatDate = (iso) => {
-    if (!iso) return "";
-    return new Date(iso).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   const weekLabels = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+  const glassPercent = Math.min(weeklyStreak / 7, 1);
 
   return (
-    <div className="min-h-screen bg-white font-[Montserrat]">
+    <div className="min-h-screen bg-white font-[Montserrat] pt-20">
 
-      <main className="max-w-[360px] mx-auto px-6 pt-6">
-        <h1 className="text-[36px] font-bold text-black mb-6">Achievements</h1>
-        <h2 className="text-[24px] font-bold text-black mb-4">This week</h2>
+      <main className="max-w-[360px] md:max-w-[600px] mx-auto px-6">
 
-        {/* WEEKLY CARD */}
-        <section className="bg-[#BDDBF7] w-[314px] h-[252px] rounded-[35px] p-5 flex flex-col mx-auto mb-10">
+        {/* WEEKLY */}
+        <section className="bg-[#BDDBF7]/30 backdrop-blur-sm border border-[#BDDBF7] shadow-md w-full rounded-[35px] p-5 flex flex-col mx-auto mb-12">
+
           <div className="flex items-center">
-            <div className="w-[129px] h-[129px] bg-white rounded-full flex items-center justify-center shadow relative overflow-hidden">
-              <WeeklyGoalGlass percent={weeklyPercent} />
+            <div className="w-[129px] h-[129px] bg-white rounded-full flex items-center justify-center shadow border border-[#BDDBF7] relative overflow-hidden">
+              <WeeklyGoalGlass percent={glassPercent} />
             </div>
 
             <div className="ml-4">
-              <p className="text-[20px] font-bold text-black mb-1">
+              <p className="text-[20px] font-bold text-[#0055A0] mb-1">
                 Weekly goal
               </p>
               <p className="text-[13px] font-semibold text-[#0055A0]">
@@ -156,7 +126,7 @@ export default function Achievements() {
             </div>
           </div>
 
-          {/* ЛІНІЯ + КРАПКИ ДНІВ ТИЖНЯ */}
+          {/* WEEK DAYS */}
           <div className="mt-5 relative w-full flex flex-col items-center">
             <div className="absolute top-[5px] left-[22px] right-[22px] h-[2px] bg-[#438BC4] rounded-full" />
 
@@ -182,28 +152,27 @@ export default function Achievements() {
             </div>
           </div>
 
-          {/* STREAK (ДНІ ПІДРЯД) */}
+          {/* STREAK */}
           <div className="mt-5 flex justify-center items-end gap-[4px]">
-            <p className="text-[20px] font-bold text-black leading-none">
+            <p className="text-[20px] font-bold text-[#0055A0] leading-none">
               {weeklyStreak} days
             </p>
             <img src={streakIcon} alt="streak" className="w-[21px] h-[19px]" />
           </div>
         </section>
 
-        {/* ACHIEVEMENTS GRID */}
-        <h2 className="text-[24px] font-bold text-black mb-4">My rewards</h2>
+        {/* REWARDS */}
+        <h2 className="text-[24px] font-bold text-[#0055A0] mb-4">My rewards</h2>
 
-        <div className="grid grid-cols-3 gap-4 justify-items-center">
+        {/* GRID UPDATED: 3 on mobile, 4 on wide screens */}
+        <div className="grid grid-cols-3 md:grid-cols-4 gap-4 justify-items-center mb-20">
           {achievements.map((a) => (
             <div
               key={a.id}
               onClick={() => setSelected(a)}
-              className="w-[82px] h-[82px] bg-[#BDDBF7] rounded-[20px] flex flex-col items-center justify-center text-center shadow-sm p-2 cursor-pointer hover:scale-105 transition-transform"
+              className="w-[82px] h-[82px] bg-[#BDDBF7]/30 border border-[#BDDBF7] backdrop-blur-sm rounded-[20px] flex flex-col items-center justify-center text-center shadow-sm p-2 cursor-pointer hover:bg-[#BDDBF7]/50 transition"
             >
-              {a.icon && (
-                <img src={a.icon} className="w-[34px] h-[34px] mb-1" />
-              )}
+              {a.icon && <img src={a.icon} className="w-[34px] h-[34px] mb-1" />}
               <p className="text-[11px] font-semibold text-[#0055A0] leading-tight">
                 {a.name}
               </p>
@@ -212,14 +181,11 @@ export default function Achievements() {
         </div>
       </main>
 
-      {/* MODAL ACHIEVEMENT INFO */}
+      {/* MODAL */}
       {selected && (
-        <div
-          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-          onClick={() => setSelected(null)}
-        >
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" onClick={() => setSelected(null)}>
           <div
-            className="bg-white rounded-[25px] w-[280px] p-6 text-center relative"
+            className="bg-white rounded-[25px] w-[280px] p-6 text-center relative shadow-md"
             onClick={(e) => e.stopPropagation()}
           >
             {selected.icon && (
@@ -234,12 +200,10 @@ export default function Achievements() {
               {selected.name}
             </h3>
 
-            <p className="text-[14px] text-gray-700 mb-3">
-              {selected.condition}
-            </p>
+            <p className="text-[14px] text-gray-700 mb-3">{selected.condition}</p>
 
             <p className="text-[12px] text-gray-500">
-              Achieved: {formatDate(selected.achievedAt)}
+              Achieved: {new Date(selected.achievedAt).toLocaleDateString()}
             </p>
 
             <button
