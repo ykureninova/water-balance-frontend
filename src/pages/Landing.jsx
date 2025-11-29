@@ -75,18 +75,18 @@ function Landing() {
   return (
     <div className="w-full min-h-screen overflow-x-hidden bg-white">
       {/* ====================== PAGE 1 — HERO ====================== */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-32 bg-[#f9f9f9]">
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-32 bg-white">
         {/* blurred background spot */}
-        <div className="absolute top-40 left-1/2 -translate-x-1/2 w-[500px] h-[350px] rounded-full bg-[#8CC1E9] blur-[140px] opacity-90"></div>
-        <h1 className="relative text-3xl font-bold text-center mb-4 text-[#12284b]">
+        <div className="absolute top-85 left-1/2 -translate-x-1/2 w-[380px] h-[260px] rounded-full bg-[#8CC1E9] blur-[100px] opacity-90"></div>
+        <h1 className="relative text-4xl font-bold text-center mb-4 text-[#12284b]">
           Stay on the wave of hydration
         </h1>
-        <p className="relative text-center text-base mb-6 text-[#12284b]">
+        <p className="relative text-center text-lg font-semibold mb-6 text-[#12284b]">
           Track your daily water intake easily and keep your body healthy.
         </p>
         <button 
         onClick={() => navigate("/tracker")}
-        className="relative bg-blue-600 text-white px-6 py-3 rounded-lg cursor-pointer">
+        className="relative bg-[#0055A0] text-white px-6 py-1 rounded-full cursor-pointer">
           Start now
         </button>
       </section>
@@ -102,29 +102,33 @@ function Landing() {
             Drops.
           </span>
         </div>
-        <div className="max-w-md mt-6 text-center">
-          <p className="text-lg font-semibold text-[#12284b] px-4">
+        <div className="max-w-md mt-8 text-left">
+          <p className="text-xl font-semibold text-[#12284b] px-4">
             Want to drink more water but find it hard to keep track? Drops makes it simple.
           </p>
         </div>
       </section>
       {/* ====================== PAGE 3 — FEATURES ====================== */}
-      <section className="w-full min-h-screen bg-[#bddbf7] pt-24 pb-12 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-8 text-[#12284b]">Meet our features</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center">
+      <section className="w-full min-h-screen bg-[#bddbf7] pt-24 pb-12 px-6 ">
+        <h2 className="text-3xl font-bold mb-12 text-center text-[#12284b]">Meet our features</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center max-w-[900px] mx-auto mt-16 sm:mt-24">
           {[
-            { icon: "💧", title: "Tracker", text: "Log every drink and see your progress." },
-            { icon: "📊", title: "Statistics", text: "View insights over days or weeks." },
-            { icon: "🎯", title: "Achievements", text: "Earn rewards for your progress." },
-            { icon: "💡", title: "Tips", text: "Improve hydration habits daily." },
+            { icon: "src/assets/drop1.png", title: "Tracker", text: "Log every drink and see your progress." },
+            { icon: "src/assets/stats.png", title: "Statistics", text: "View insights over days or weeks." },
+            { icon: "src/assets/trophy.png", title: "Awards", text: "Earn rewards for your progress." },
+            { icon: "src/assets/tips.png", title: "Tips", text: "Improve hydration habits daily." },
           ].map((f, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl p-4 w-full max-w-[200px] flex flex-col items-start"
-            >
-              <div className="text-xl mb-1">{f.icon}</div>
-              <h3 className="font-bold text-lg mb-1">{f.title}</h3>
-              <p className="text-sm text-[#12284b]">{f.text}</p>
+              className="bg-white rounded-xl p-3 sm:p-5 w-full max-w-[160px] sm:max-w-[300px] lg:max-w-[240px] flex flex-col items-start"
+            >  <img
+      src={f.icon}
+      
+      className="w-8 h-8 sm:w-10 sm:h-10 mb-2 object-contain"
+    />
+              
+              <h3 className="font-bold text-sm sm:text-lg leading-tight mb-1 break-words">{f.title}</h3>
+              <p className="text-sm sm:text-lg sm:font-medium text-[#12284b]">{f.text}</p>
             </div>
           ))}
         </div>
@@ -184,6 +188,11 @@ function Landing() {
       </section>
       {/* ====================== PAGE 5 — CTA ====================== */}
       <section className="w-full min-h-screen bg-[#eaf3fb] pt-24 px-6 text-center">
+         <div className="mt-6 px-4">
+          <h2 className="text-3xl font-bold text-[#0055a0]">
+            It's time to drink your water!
+          </h2>
+          
         <div className="flex justify-center mt-12">
           <img
             src="/images/tracker.png"
@@ -192,20 +201,19 @@ function Landing() {
           />
         </div>
         <div className="mt-6 px-4">
-          <h2 className="text-xl font-bold text-[#0055a0]">
-            It's time to drink your water!
-          </h2>
-          <p className="text-[#12284b] mt-2">
+          <p className="text-lg text-[#12284b] mt-2 font-semibold">
             Create your account today and take the first step toward better hydration and well-being.
           </p>
+          
           <button onClick={() => navigate("/register")}
-          className="mt-4 bg-blue-600 text-white px-6 py-3 rounded-lg">
+          className="mt-4 bg-[#0055A0] text-white font-medium px-6 py-1 rounded-full">
             Register now
           </button>
         </div>
+        </div>
       </section>
       {/* ====================== FOOTER ====================== */}
-      <footer className="bg-white text-center py-8 text-[#12284b]">
+      <footer className="bg-white text-center py-9 text-[#12284b]">
         <h2 className="text-2xl font-bold text-[#0055a0]">drops.</h2>
         <p className="font-semibold mb-4">Stay on the wave of hydration</p>
         <div className="flex flex-col gap-1 mb-4">
@@ -213,11 +221,7 @@ function Landing() {
           <a className="text-blue-700">📞 +380 (97) 928-64-19</a>
         </div>
         <nav className="flex flex-wrap justify-center gap-4 text-sm">
-          <a>Tracker</a>
-          <a>Statistic</a>
-          <a>Achievements</a>
-          <a>Account</a>
-          <a>Support</a>
+          
         </nav>
       </footer>
     </div>
