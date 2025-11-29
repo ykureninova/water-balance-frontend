@@ -18,40 +18,39 @@ export default function StatsChart({ data, range, isMobile }) {
 
   const weekNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-
+  // X-labels
   let labels = [];
 
   if (range === "w") {
-
     labels = data.map((p, i) => weekNames[i]);
   } else {
     if (isMobile) {
-      // MOBILE — кожні кілька годин
       const stepX = Math.ceil(data.length / 8);
       labels = data.map((p, i) => (i % stepX === 0 ? p.h : ""));
     } else {
-
       labels = data.map((p) => p.h);
     }
   }
 
+  // Показ точок (лише там, де є підпис на мобільному)
+  const showPoints = data.map((p, i) => (!isMobile ? true : labels[i] !== ""));
 
-  const showPoints = data.map((p, i) => {
-    if (!isMobile) return true;
-    return labels[i] !== "";
-  });
-
-
+  // Значення ml
   const values = data.map((p) => p.ml);
-  const max = Math.max(...values, 0);
+  const maxValue = Math.max(...values, 0);
 
+  // ----- КРАСИВА ШКАЛА Y -----
+  let step;
+  if (maxValue <= 200) step = 50;
+  else if (maxValue <= 500) step = 100;
+  else if (maxValue <= 1500) step = 200;
+  else if (maxValue <= 3000) step = 300;
+  else step = 500;
+
+  const suggestedMax = Math.ceil(maxValue / step) * step;
   const maxTicks = 6;
-  let step = Math.ceil(max / (maxTicks - 1));
-  if (step < 50) step = 50;
 
-  const suggestedMax = Math.ceil(max / step) * step;
-
-
+  // Chart.js data
   const chartData = {
     labels,
     datasets: [
@@ -69,7 +68,7 @@ export default function StatsChart({ data, range, isMobile }) {
     ],
   };
 
-
+  // Chart.js options
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -78,9 +77,9 @@ export default function StatsChart({ data, range, isMobile }) {
       x: {
         ticks: {
           color: "#438BC4",
+          autoSkip: false,
           maxRotation: 0,
           minRotation: 0,
-          autoSkip: false,
         },
         grid: { display: false },
       },
@@ -106,7 +105,6 @@ export default function StatsChart({ data, range, isMobile }) {
       legend: { display: false },
     },
   };
-
 
   return (
     <div
