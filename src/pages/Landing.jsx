@@ -18,7 +18,22 @@ const reviews = [
 
 function Landing() {
   const navigate = useNavigate();
-  
+  const images = [
+  "src/assets/drops1.jpg",
+  "src/assets/drops2.jpg",
+  "src/assets/drops3.jpg",
+];
+
+const [activeImage, setActiveImage] = useState(0);
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setActiveImage((prev) => (prev + 1) % images.length);
+  }, 4000); // смена каждые 4 сек
+
+  return () => clearInterval(timer);
+}, [images.length]);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const startX = useRef(null);
   const isDragging = useRef(false);
@@ -78,10 +93,10 @@ function Landing() {
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-32 bg-white">
         {/* blurred background spot */}
         <div className="absolute top-85 left-1/2 -translate-x-1/2 w-[380px] h-[260px] rounded-full bg-[#8CC1E9] blur-[100px] opacity-90"></div>
-        <h1 className="relative text-4xl font-bold text-center mb-4 text-[#12284b]">
-          Stay on the wave of hydration
+        <h1 className="relative text-4xl font-bold text-center mb-4 text-[#12284b]   animate-fadeUp">
+          Stay on the Wave of Hydration
         </h1>
-        <p className="relative text-center text-lg font-semibold mb-6 text-[#12284b]">
+        <p className="relative text-center text-lg font-semibold mb-6 text-[#12284b] lg:max-w-[550px] lg:mx-auto lg:leading-snug">
           Track your daily water intake easily and keep your body healthy.
         </p>
         <button 
@@ -92,26 +107,34 @@ function Landing() {
       </section>
       {/* ====================== PAGE 2 — IMAGE BLOCK ====================== */}
       <section className="w-full min-h-screen flex flex-col items-center justify-start pt-24 px-6">
-        <div className="relative mt-12">
-          <img
-            src="/images/drops.jpg"
-            className="w-[315px] h-[387px] rounded-xl object-cover"
-            alt="water"
-          />
-          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 text-white text-4xl font-bold drop-shadow-lg">
-            Drops.
-          </span>
-        </div>
-        <div className="max-w-md mt-8 text-left">
-          <p className="text-xl font-semibold text-[#12284b] px-4">
+      <div className="relative mt-12 w-[260px] h-[330px] sm:w-[315px] sm:h-[387px]">
+  {images.map((src, index) => (
+    <img
+      key={index}
+      src={src}
+      alt={`water-${index}`}
+      className={`
+        absolute inset-0 w-full h-full rounded-xl object-cover 
+        transition-opacity duration-700
+        ${index === activeImage ? "opacity-100" : "opacity-0"}
+      `}
+    />
+  ))}
+
+  <span className="absolute top-[40%] left-1/2 -translate-x-1/2 text-white text-4xl font-bold drop-shadow-lg">
+    Drops.
+  </span>
+</div>
+        <div className="max-w-md mt-9 text-left">
+          <p className="text-xl font-semibold text-[#12284b] px-10">
             Want to drink more water but find it hard to keep track? Drops makes it simple.
           </p>
         </div>
       </section>
       {/* ====================== PAGE 3 — FEATURES ====================== */}
-      <section className="w-full min-h-screen bg-[#bddbf7] pt-24 pb-12 px-6 ">
-        <h2 className="text-3xl font-bold mb-12 text-center text-[#12284b]">Meet our features</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center max-w-[900px] mx-auto mt-16 sm:mt-24">
+      <section className="w-full min-h-screen bg-[#bddbf7] pt-25 pb-10 px-6 ">
+        <h2 className="text-3xl font-bold mb-12 text-center text-[#12284b] lg:mt-30">Meet Our Features</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-items-center max-w-[900px] mx-auto mt-16 sm:mt-14">
           {[
             { icon: "src/assets/drop1.png", title: "Tracker", text: "Log every drink and see your progress." },
             { icon: "src/assets/stats.png", title: "Statistics", text: "View insights over days or weeks." },
@@ -134,7 +157,7 @@ function Landing() {
         </div>
       </section>
       {/* ====================== PAGE 4 — REVIEWS ====================== */}
-      <section className="w-full min-h-screen bg-[#f0f4fa] pt-24 pb-12 px-6 text-center">
+      <section className="w-full min-h-screen bg-white pt-25 pb-12 px-6 text-center">
         <h2 className="text-3xl font-bold mb-12 text-[#12284b]">What Our Users Say</h2>
         <div
           ref={sliderRef}
@@ -187,10 +210,10 @@ function Landing() {
         </div>
       </section>
       {/* ====================== PAGE 5 — CTA ====================== */}
-      <section className="w-full min-h-screen bg-[#eaf3fb] pt-24 px-6 text-center">
+      <section className="w-full min-h-screen bg-[#eaf3fb] pt-25 px-6 text-center">
          <div className="mt-6 px-4">
-          <h2 className="text-3xl font-bold text-[#0055a0]">
-            It's time to drink your water!
+          <h2 className="text-3xl font-bold text-[#12284b]">
+            It's Time to Drink your Water
           </h2>
           
         <div className="flex justify-center mt-12">
@@ -200,13 +223,14 @@ function Landing() {
             className="w-[70%] max-w-[280px] rounded-xl"
           />
         </div>
-        <div className="mt-6 px-4">
-          <p className="text-lg text-[#12284b] mt-2 font-semibold">
+        <div className="mt-6 px-2 sm:px-4">
+          <p className="text-medium text-[#12284b] mt-2 font-semibold  max-w-[420px] sm:max-w-[500px] lg:max-w-[600px] 
+               mx-auto leading-snug text-center">
             Create your account today and take the first step toward better hydration and well-being.
           </p>
           
           <button onClick={() => navigate("/register")}
-          className="mt-4 bg-[#0055A0] text-white font-medium px-6 py-1 rounded-full">
+          className="mt-6 bg-[#0055A0] text-white font-medium px-6 py-1 rounded-full">
             Register now
           </button>
         </div>
@@ -214,11 +238,17 @@ function Landing() {
       </section>
       {/* ====================== FOOTER ====================== */}
       <footer className="bg-white text-center py-9 text-[#12284b]">
-        <h2 className="text-2xl font-bold text-[#0055a0]">drops.</h2>
-        <p className="font-semibold mb-4">Stay on the wave of hydration</p>
-        <div className="flex flex-col gap-1 mb-4">
-          <a className="text-blue-700">📧 drops.tracker@email.com</a>
-          <a className="text-blue-700">📞 +380 (97) 928-64-19</a>
+        <img src="/src/assets/logo.svg" alt="Hydra" className="h-6 object-contain mx-auto" />
+        <p className="font-semibold mb-1">Stay on the wave of hydration</p>
+        <div className="flex flex-col gap-1 mb-4 items-center">
+           <a className="flex items-center gap-2 text-[#bddbf7] font-medium">
+            <img src="/src/assets/mail.png" alt="email" className="w-5 h-5 object-contain" />
+            drops.tracker@gmail.com
+            </a>
+           <a className="flex items-center gap-2 text-[#bddbf7] font-medium">
+             <img src="/src/assets/phone.png" alt="phone" className="w-5 h-5 object-contain" />
+            +380 (97) 928-64-19
+          </a>
         </div>
         <nav className="flex flex-wrap justify-center gap-4 text-sm">
           
